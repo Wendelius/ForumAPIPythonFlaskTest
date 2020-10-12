@@ -12,7 +12,7 @@ message_put_args.add_argument("message_id", type=int, help="the identifier of th
 message_put_args.add_argument("topic", type=str, help="Topic of the message is required", required=True)
 message_put_args.add_argument("body", type=str, help="Body  of the message is required", required=True)
 message_put_args.add_argument("author", type=str, help="Author  of the message")
-message_put_args.add_argument("views", type=str, help="Views  of the message")
+message_put_args.add_argument("views", type=int, help="Views  of the message")
 
 # Sample data testing parameters to GET
 # message {"id": 0, "topic":"?", "body":"?", "author":"?", "likedBy": [], "views": 0}
@@ -33,7 +33,11 @@ def abort_if_message_id_exists(message_id):
 class Messages(Resource):
     def get(self, message_id): # Define what happens when Messages receives a "GET" request with a message_id parameter
         abort_if_message_id_not_found(message_id)
-        # messages[message_id]["views"] = messages[message_id]["views"] + 1
+        # Increment the view count
+        message = messages[message_id]
+        message["views"] = message["views"] + 1
+        messages[message_id] = message
+        # then return the message
         return messages[message_id]
 
     def post(self):
@@ -55,7 +59,7 @@ class Messages(Resource):
         return "", 204
 
 
-# Define the resources that the API knows about and what route (URL) they are found at. Add your own here.
+# Define the resources that the API knows about and what route(s) (URL) they are found at. Add your own here.
 api.add_resource(Messages, "/messages", "/messages/<int:message_id>")
 
 # Used to start the program when calling python main.py on the command line

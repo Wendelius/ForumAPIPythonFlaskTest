@@ -42,6 +42,10 @@ print("GET: ")
 response = requests.get(BASE + "messages/4")
 print(response.json())
 
+print("GET: ")
+response = requests.get(BASE + "messages/4")
+print(response.json())
+
 # Test Messages PUT
 print("PUT (Update): ")
 response = requests.put(BASE + "messages/4", {"message_id":4, "topic": "New", "body": "A new clever post", "author": "soso", "views":2})
